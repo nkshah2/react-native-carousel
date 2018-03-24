@@ -22,6 +22,7 @@ type PropType = {
   enableSteppedScrolling?: boolean,
   showsHorizontalScrollIndicator?: boolean,
   autoScrollInterval?: number,
+  initialScrollIndex?: number,
 };
 
 type StateType = {
@@ -39,13 +40,14 @@ class Carousel extends PureComponent< PropType, StateType > {
     userScrollEnabled: true,
     enableSteppedScrolling: false,
     showsHorizontalScrollIndicator: true,
+    initialScrollIndex: 0,
   }
 
   constructor( props: PropType ) {
     super( props );
 
     this.state = {
-      currentIndex: 0,
+      currentIndex: props.initialScrollIndex || 0,
     }
 
     this.renderPagerItem = this.renderPagerItem.bind( this );
@@ -120,7 +122,6 @@ class Carousel extends PureComponent< PropType, StateType > {
   }
 
   render() {
-    console.log( 'current index', this.state.currentIndex );
     const {
       data,
       renderItem,
@@ -154,6 +155,7 @@ class Carousel extends PureComponent< PropType, StateType > {
             data={data}
             extraData={this.state.currentIndex}
             horizontal
+            keyExtractor={keyExtractor}
             renderItem={this.renderPagerItem}
             ref={( ref ) => { this.pagerRef = ref; }}
           />
