@@ -1,0 +1,14 @@
+# ignoring node_modules just in case
+node_modules/**/*
+
+#Android
+.idea
+.gradle/
+gradlew
+gradlew.bat
+gradle/
+
+*.properties
+*.iml
+
+assets/
