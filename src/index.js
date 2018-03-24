@@ -33,7 +33,7 @@ const AUTO_SCROLL_DEFAULT_INTERVAL = 3000;
 
 class Carousel extends PureComponent< PropType, StateType > {
   static defaultProps = {
-    autoScrollEnabled: true,
+    autoScrollEnabled: false,
     showPagerIndicator: false,
     renderPagerButton: null,
     containerStyle: {},
