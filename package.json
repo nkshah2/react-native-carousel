@@ -1,6 +1,22 @@
 { "main": "src/index.js",
   "name": "react-native-carousel",
   "author": "nkshah2",
+  "description": "A simple way to show carousels in your react native application. Complete with auto scroll and pager indicator support.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nkshah2/react-native-carousel"
+  },
+  "keywords": [
+    "react",
+    "native",
+    "carousel",
+    "component",
+    "autoscroll"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nkshah2/react-native-carousel/issues"
+  },
   "version": "0.0.1",
   "private": true,
   "scripts": {
