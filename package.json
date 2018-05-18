@@ -1,4 +1,5 @@
-{ "main": "src/index.js",
+{
+  "main": "src/index.js",
   "name": "react-native-custom-carousel",
   "author": "nkshah2",
   "description": "A simple way to show carousels in your react native application. Complete with auto scroll and pager indicator support.",
@@ -20,22 +21,27 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint src/ --fix",
+    "flow": "flow"
   },
-
   "peerDependencies": {
     "react": "16.3.0-alpha.1",
     "react-native": "0.54.2"
   },
-
   "devDependencies": {
     "babel-jest": "23.0.0-alpha.0",
     "babel-preset-react-native": "4.0.0",
-    "flow-bin": "^0.61.0",
     "jest": "22.4.2",
     "react-test-renderer": "16.3.0-alpha.1"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "dependencies": {
+    "eslint-config-rallycoding": "^3.2.0",
+    "flow-bin": "^0.61.0",
+    "react-native": "0.54.2",
+    "react": "16.3.0-alpha.1"
   }
 }

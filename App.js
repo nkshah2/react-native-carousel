@@ -59,6 +59,7 @@ export default class App extends Component<null> {
           keyExtractor={( item ) => item.title}
           containerStyle={styles.carouselContainerStyle}
           autoScrollEnabled
+          userScrollEnabled={ false }
           autoScrollInterval={ 5000 }
           showPagerIndicator
           renderPagerButton={( index, currentIndex ) => {

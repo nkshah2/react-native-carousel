@@ -19,7 +19,6 @@ type PropType = {
   renderPagerButton?: Function | null,
   containerStyle?: Object,
   autoScrollEnabled?: boolean,
-  enableSteppedScrolling?: boolean,
   showsHorizontalScrollIndicator?: boolean,
   autoScrollInterval?: number,
   initialScrollIndex?: number,
@@ -38,7 +37,6 @@ class Carousel extends PureComponent< PropType, StateType > {
     renderPagerButton: null,
     containerStyle: {},
     userScrollEnabled: true,
-    enableSteppedScrolling: false,
     showsHorizontalScrollIndicator: true,
     initialScrollIndex: 0,
   }
@@ -48,29 +46,21 @@ class Carousel extends PureComponent< PropType, StateType > {
 
     this.state = {
       currentIndex: props.initialScrollIndex || 0,
-    }
+    };
 
     this.renderPagerItem = this.renderPagerItem.bind( this );
     this.handleAutoScroll = this.handleAutoScroll.bind( this );
     this.scrollToIndex = this.scrollToIndex.bind( this );
+
+    this.shouldAutoScroll = true;
   }
   state: StateType;
 
   componentDidMount() {
     const {
       autoScrollEnabled,
-      enableSteppedScrolling,
-      userScrollEnabled,
       autoScrollInterval,
     } = this.props;
-
-    if ( autoScrollEnabled && !enableSteppedScrolling ) {
-      console.warn( 'Auto Scroll is intended to work with stepped scrolling, Auto Scroll without stepped scrolling may make this component misbehave.' );
-    }
-
-    if ( autoScrollEnabled && userScrollEnabled ) {
-      console.warn( 'You should disable user scroll to make auto scroll a smooth experience' );
-    }
 
     if ( autoScrollEnabled ) {
       setInterval( this.handleAutoScroll, autoScrollInterval || AUTO_SCROLL_DEFAULT_INTERVAL );
@@ -80,6 +70,7 @@ class Carousel extends PureComponent< PropType, StateType > {
   props: PropType;
   listRef: Object | null;
   pagerRef: Object | null;
+  shouldAutoScroll: boolean;
 
   scrollToIndex : Function;
   scrollToIndex( index: number ) {
@@ -91,7 +82,8 @@ class Carousel extends PureComponent< PropType, StateType > {
   handleAutoScroll: Function;
   handleAutoScroll() {
     const { data } = this.props;
-    if ( this.state.currentIndex === data.length - 1 ) {
+    if ( this.shouldAutoScroll ) {
+      if ( this.state.currentIndex === data.length - 1 ) {
       // scroll to first index
       this.setState( { currentIndex: 0 } );
     } else {
@@ -99,7 +91,8 @@ class Carousel extends PureComponent< PropType, StateType > {
       this.setState( { currentIndex: this.state.currentIndex + 1 } );
     }
 
-    this.scrollToIndex( this.state.currentIndex )
+    this.scrollToIndex( this.state.currentIndex );
+    }
   }
 
   renderPagerItem: Function;
@@ -110,13 +103,13 @@ class Carousel extends PureComponent< PropType, StateType > {
     const opacity = index === this.state.currentIndex ? 1 : 0.5;
     return (
       <View
-        style={[{
+        style={ [{
           width: 10,
           height: 10,
           borderRadius: 5,
           backgroundColor: 'black',
           marginHorizontal: 2,
-        }, { opacity }]}
+        }, { opacity }] }
       />
     );
   }
@@ -128,38 +121,59 @@ class Carousel extends PureComponent< PropType, StateType > {
       keyExtractor,
       containerStyle,
       userScrollEnabled,
-      enableSteppedScrolling,
       showsHorizontalScrollIndicator,
       showPagerIndicator,
       getItemLayout,
     } = this.props;
     return (
-      <View style={[containerStyle, { flexDirection: 'column', alignItems: 'center'}]}>
-        <FlatList
-          data={data}
-          extraData={data}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          horizontal
-          scrollEnabled={userScrollEnabled}
-          pagingEnabled={enableSteppedScrolling}
-          showsHorizontalScrollIndicator={showsHorizontalScrollIndicator}
-          overScrollMode={'never'}
-          getItemLayout={getItemLayout}
-          ref={( ref ) => { this.listRef = ref; }}
-          style={{ marginBottom: 10 }}
-        />
-        {
-          showPagerIndicator &&
+      <View
+        style={ [containerStyle, { flexDirection: 'column', alignItems: 'center' }] }
+      >
           <FlatList
-            data={data}
-            extraData={this.state.currentIndex}
+            data={ data }
+            extraData={ data }
+            renderItem={ renderItem }
+            keyExtractor={ keyExtractor }
             horizontal
-            keyExtractor={keyExtractor}
-            renderItem={this.renderPagerItem}
-            ref={( ref ) => { this.pagerRef = ref; }}
+            scrollEventThrottle={ 1 }
+            onScroll={ ( event ) => {
+              const layoutWidth = Math.round( event.nativeEvent.layoutMeasurement.width );
+              const offsetX = Math.round( event.nativeEvent.contentOffset.x );
+              const index = Math.round( offsetX / layoutWidth );
+
+              if ( index !== this.state.currentIndex ) {
+                this.setState( { currentIndex: index } );
+              }
+            } }
+            onTouchStart={ () => {
+              if ( userScrollEnabled ) {
+                this.shouldAutoScroll = false;
+              }
+            } }
+            onTouchEnd={ () => {
+              if ( userScrollEnabled ) {
+                this.shouldAutoScroll = true;
+              }
+            } }
+            scrollEnabled={ userScrollEnabled }
+            pagingEnabled
+            showsHorizontalScrollIndicator={ showsHorizontalScrollIndicator }
+            overScrollMode={ 'never' }
+            getItemLayout={ getItemLayout }
+            ref={ ( ref ) => { this.listRef = ref; } }
+            style={ { marginBottom: 10 } }
           />
-        }
+          {
+            showPagerIndicator &&
+            <FlatList
+              data={ data }
+              extraData={ this.state.currentIndex }
+              horizontal
+              keyExtractor={ keyExtractor }
+              renderItem={ this.renderPagerItem }
+              ref={ ( ref ) => { this.pagerRef = ref; } }
+            />
+          }
       </View>
     );
   }
