@@ -3,6 +3,7 @@
     "rules": {
         "space-in-parens": ["error", "always"],
         "react/jsx-curly-spacing": [2, "always"],
-        "react/sort-comp": 0
+        "react/sort-comp": 0,
+        "arrow-body-style": 0
       }
   }

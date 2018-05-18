@@ -46,39 +46,39 @@ export default class App extends Component<null> {
   renderItem: Function;
   renderItem( { item }: Object ) {
     return (
-      <Card data={item} key={item.title} />
+      <Card data={ item } key={ item.title } />
     );
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={ styles.container }>
         <Carousel
-          data={data}
-          renderItem={this.renderItem}
-          keyExtractor={( item ) => item.title}
-          containerStyle={styles.carouselContainerStyle}
+          data={ data }
+          renderItem={ this.renderItem }
+          keyExtractor={ ( item ) => item.title }
+          containerStyle={ styles.carouselContainerStyle }
           autoScrollEnabled
           userScrollEnabled={ false }
           autoScrollInterval={ 5000 }
           showPagerIndicator
-          renderPagerButton={( index, currentIndex ) => {
+          renderPagerButton={ ( index, currentIndex ) => {
             const opacity = index === currentIndex ? 1 : 0.5;
             return (
               <View
-                style={[{
+                style={ [{
                   width: 10,
                   height: 10,
                   borderRadius: 5,
                   backgroundColor: 'red',
                   marginHorizontal: 2,
-                }, { opacity }]}
+                }, { opacity }] }
               />
             );
-          }}
-          getItemLayout={( data, index ) => {
-            return { length: width, offset: width * index, index }
-          }}
+          } }
+          getItemLayout={ ( dataset, index ) => {
+            return { length: width, offset: width * index, index };
+          } }
         />
       </View>
     );
