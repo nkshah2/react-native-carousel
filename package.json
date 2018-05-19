@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/nkshah2/react-native-carousel/issues"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
