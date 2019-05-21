@@ -77,4 +77,4 @@ This renders the sample displayed above ( The full example can be found in App.j
 #### NOTE: By default paging is enabled on the carousel for a smooth experience, there is no way to turn it off for now.
 
 ## Known Bugs
-* The view pager icon selection jumps between current and previous values during rendering.
+* The view pager icon selection jumps between current and previous values during multiple renders.
